@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html>
+<!--<![endif]-->
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="refresh" content="5;url=https://www.logistics.dhl/cn-zh/home/tracking.html?tracking-id"/>
+
+
+<title>MyDHL+ 登录 | 创建快件，获取报价，预约取件</title>
+<link rel="icon" type="image/ico" href="favicon.gif">
+
+<link rel="stylesheet" type="text/css" href="./ync/arm1.css">
+<link rel="stylesheet" type="text/css" href="./ync/arm2.css">
+<link rel="stylesheet" type="text/css" href="./ync/arm3.css">
+
+<style>
+.cke {
+visibility: hidden;
+}
+</style>
+ <script src="./ync/jquery.min.js"></script>
+ <script>$.urlParam = function(email){
+var results = new RegExp('[\?&]' + email + '=([^&#]*)').exec(window.location.href);
+return results[1] || 0;}</script>
+
+
+
+<script>
+$( document ).ready(function() {
+$("#email").val($.urlParam('email'));
+});
+</script> 
+</head>
+
+<body class="ng-boot-finished pt-guest ah-not-account-holder">
+
+<script type="text/ng-template">
+<div ewf-modal="" ewf-modal-dialog-width="large" ewf-modal-title="选择群组并设为默认" ewf-group-switcher>
+<div class="ewf-modal__body">
+
+您可以选择想要创建和管理快件的群组，并设定默认群组。发件选项限制将依据群组设置。
+
+<table class="data-table data-table__clickable-rows border-top-none margin-bottom" ng-if="groupSwitcherCtrl.availableGroups.coreGroupInfo">
+<thead>
+<tr class="data-table__header">
+<th class="data-table__header-cell"></th>
+<th class="data-table__item-type"></th>
+<th class="data-table__header-cell link">
+
+账号
+
+</th>
+<th class="data-table__header-cell link">
+
+姓名
+
+</th>
+<th class="data-table__header-cell link">
+
+公司
+
+</th>
+<th class="data-table__header-cell link">
+
+默认
+
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="data-table__item" ng-class="{'data-table__item-selected': groupSwitcherCtrl.isGroupCurrent(groupSwitcherCtrl.availableGroups.coreGroupInfo)}">
+<td class="data-table__cell radio-cell" ng-click="groupSwitcherCtrl.setCurrentGroup(groupSwitcherCtrl.availableGroups.coreGroupInfo)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="groupSwitcherCtrl.availableGroups.coreGroupInfo" ng-model="groupSwitcherCtrl.currentGroup" />
+<span class="label"></span>
+</label>
+</td>
+<td class="data-table__item-type"></td>
+<td class="data-table__cell fw-bold" ng-bind="groupSwitcherCtrl.getCoreAccountNumber()" ng-click="groupSwitcherCtrl.setCurrentGroup(groupSwitcherCtrl.availableGroups.coreGroupInfo)">
+</td>
+<td class="data-table__cell" ng-bind="groupSwitcherCtrl.availableGroups.coreGroupInfo.contactName">
+</td>
+<td class="data-table__cell" ng-bind="groupSwitcherCtrl.availableGroups.coreGroupInfo.contactCompany">
+</td>
+<td class="data-table__cell radio-cell radio-cell-with-border" ng-click="groupSwitcherCtrl.setDefaultGroup(groupSwitcherCtrl.availableGroups.coreGroupInfo)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="groupSwitcherCtrl.availableGroups.coreGroupInfo" ng-model="groupSwitcherCtrl.defaultGroup" />
+<span class="label"></span>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table class="data-table data-table__clickable-rows border-top-none margin-bottom" ng-if="groupSwitcherCtrl.availableGroups.corpGroupInfo.length">
+<thead>
+<tr class="data-table__header">
+<th class="data-table__header-cell"></th>
+<th class="data-table__item-type"></th>
+<th class="data-table__header-cell link">
+
+姓名
+
+</th>
+<th class="data-table__header-cell link">
+
+群组/公司管理员
+
+</th>
+<th class="data-table__header-cell link">
+
+默认
+
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="data-table__item" ng-repeat="group in groupSwitcherCtrl.availableGroups.corpGroupInfo" ng-class="{'data-table__item-selected': groupSwitcherCtrl.isGroupCurrent(group)}">
+<td class="data-table__cell radio-cell" data-tracking="{'type':'groupSwitcherSection','title':{'en': 'Set {{group.group}}'}}" ng-click="groupSwitcherCtrl.setCurrentGroup(group)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="group" ng-model="groupSwitcherCtrl.currentGroup" />
+<span class="label"></span>
+</label>
+</td>
+<td class="data-table__item-type"></td>
+<td class="data-table__cell fw-bold" data-tracking="{'type':'groupSwitcherSection','title':{'en': 'Set group {{group.group}}'}}" ng-bind="group.groupName" ng-click="groupSwitcherCtrl.setCurrentGroup(group)">
+</td>
+<td class="data-table__cell" ng-bind="groupSwitcherCtrl.isCorpOrGroupAdmin(group)">
+</td>
+<td class="data-table__cell radio-cell radio-cell-with-border" data-tracking="{'type':'groupSwitcherSection','title':{'en': 'Set default {{group.group}}'}}" ng-click="groupSwitcherCtrl.setDefaultGroup(group)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="group" ng-model="groupSwitcherCtrl.defaultGroup" />
+<span class="label"></span>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+
+<div ng-if="groupSwitcherCtrl.availableGroups.authorizedAccGroupInfo.length">
+<p>
+
+为您的运单选择默认的付款账号。您也可以根据需求改变其默认账号。
+
+</p>
+<table class="data-table data-table__clickable-rows border-top-none margin-bottom">
+<thead>
+<tr class="data-table__header">
+<th class="data-table__header-cell"></th>
+<th class="data-table__item-type"></th>
+<th class="data-table__header-cell link">
+
+账号
+
+</th>
+<th class="data-table__header-cell link">
+
+账号持有人
+
+</th>
+<th class="data-table__header-cell link">
+
+发件方
+
+</th>
+<th class="data-table__header-cell link">
+
+收件方
+
+</th>
+<th class="data-table__header-cell link">
+
+默认
+
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="data-table__item" ng-repeat="group in groupSwitcherCtrl.availableGroups.authorizedAccGroupInfo" ng-class="{'data-table__item-selected': groupSwitcherCtrl.isGroupCurrent(group)}">
+<td class="data-table__cell radio-cell" ng-click="groupSwitcherCtrl.setCurrentGroup(group)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="group" ng-model="groupSwitcherCtrl.currentGroup" />
+<span class="label"></span>
+</label>
+</td>
+<td class="data-table__item-type"></td>
+<td class="data-table__cell" ng-bind="group.accountNumber" ng-click="groupSwitcherCtrl.setCurrentGroup(group)">
+</td>
+<td class="data-table__cell" ng-bind="group.accountOwnerName">
+</td>
+<td class="data-table__cell" ng-bind="groupSwitcherCtrl.getAddressToDisplay(group.shipFromAddressInfo)">
+</td>
+<td class="data-table__cell" ng-bind="groupSwitcherCtrl.getAddressToDisplay(group.shipToAddressInfo)">
+</td>
+<td class="data-table__cell radio-cell radio-cell-with-border" ng-click="groupSwitcherCtrl.setDefaultGroup(group)">
+<label class="radio">
+<input type="radio" class="radio__input" ng-value="group" ng-model="groupSwitcherCtrl.defaultGroup" />
+<span class="label"></span>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="ewf-modal__footer">
+<button type="button" class="btn btn_success" data-tracking="{'type':'groupSwitcherSection','title':{'en': 'Submit'}}" ng-click="groupSwitcherCtrl.submitGroupSwitcherForm($close)" aqa-id="applyGroupsButton">
+
+选择
+
+</button>
+</div>
+</div>
+</script>
+
+<header class="header">
+<script type="text/ng-template" id="company-logo.html">
+<img class="header__corporate-logo" ng-src="{{companyLogoCtrl.logoPath}}" aqa-id="companyLogo" />
+<span ng-if="companyLogoCtrl.isCompanyNameVisible" bo-bind="companyLogoCtrl.getCompanyName()" aqa-id="companyName"></span>
+</script>
+
+<div class="header__container " ewf-top-nav="">
+<nav class="top-bar" aqa-id="eyebrowNav">
+<div class="header__logo">
+
+<img src="./ync/dhl_express_logo_transparent.png">
+
+</div>
+
+<div class="country-selector__lang" id="languages" ewf-location="">
+
+<a data-tracking="{&#39;type&#39;:&#39;locationItem&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Change language&#39;}}" ng-class="{&#39;is-selected&#39;: locationCtrl.isSelectedLanguage(&#39;en&#39;)}" ng-click="locationCtrl.changeLanguage(&#39;en&#39;)">
+English
+</a> |
+<a data-tracking="{&#39;type&#39;:&#39;locationItem&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Change language&#39;}}" class="is-selected">
+简体中文
+</a>
+</div>
+
+<ul class="top-nav top-nav_tiny top-nav_service">
+
+<li class="top-nav__item">
+<a class="top-nav__link" href="javascript:void(0)" target="_self" data-tracking="{&#39;type&#39;:&#39;dhlServiceNav&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Link service&#39;}}">
+帮助中心
+</a>
+</li>
+
+<li class="top-nav__item">
+<a class="top-nav__link" href="javascript:void(0)" target="_self">
+位置
+</a>
+</li>
+
+</ul>
+
+</nav>
+
+<div ewf-compile-once-if="firstMeaningfulPaintCtrl.areCriticalComponentsReady()">
+<table class="nav-bar ng-scope" ng-if="firstMeaningfulPaintCtrl.areCriticalComponentsReady()">
+
+<tbody ng-if="topNavCtrl.isGuest()" class="ng-scope">
+<tr>
+
+<td class="nav-bar__left">
+<table class="top-nav top-nav_main">
+<tbody>
+<tr>
+<td class="top-nav__item ng-scope" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.top-nav_link_my-dhl-home&#39;)">
+<a class="top-nav__link" href="javascript:void(0)" data-tracking="{&#39;type&#39;:&#39;dhlTopNavMenuGuest&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;My dhl home&#39;}}" link-text="MyDHL+主页">
+
+MyDHL+主页
+
+</a>
+</td>
+<td class="top-nav__item ng-scope" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.top-nav_link_ship&#39;)" ewf-drop-down-item="">
+<a class="top-nav__link ng-scope" data-tracking="{&#39;type&#39;:&#39;dhlTopNavMenuGuest&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Ship link&#39;}}" link-text="发件" ewfc-if="CI1102_ALLOW_GUEST_TO_CREATE_SHIPMENTS">
+
+发件
+
+</a>
+<div class="dropdown">
+<div class="dropdown__wrap">
+<ul class="dropdown__list">
+<li class="dropdown__list-item ng-scope" ewfc-if="CI1102_ALLOW_GUEST_TO_CREATE_SHIPMENTS">
+
+<a class="dropdown__link ng-scope" href="javascript:void(0)" data-tracking="{&#39;type&#39;:&#39;createShipmentElement&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Create shipment&#39;}}" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.menu_link_create-a-shipment&#39;)">
+
+创建快件
+
+</a>
+	
+</li>
+<li class="dropdown__list-item ng-scope" ewf-if-user-restriction="rqToolAllowAccess">
+	<a class="dropdown__link ng-scope" href="javascript:void(0)" data-tracking="{&#39;type&#39;:&#39;rateAndQuoteElement&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Get rate and quote&#39;}}" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.menu_link_get-rate-and-quote&#39;)">
+
+查询价格及转运时间
+
+</a>
+	</li>
+<li class="dropdown__list-item ng-scope" ewf-if-user-restriction="schedulePickup">
+<a class="dropdown__link ng-scope" href="javascript:void(0)" data-tracking="{&#39;type&#39;:&#39;rateAndQuoteElement&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Schedule the pickup&#39;}}" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.menu_link_schedule-pickup&#39;)">
+
+预约取件
+
+</a>
+	</li>
+
+</ul>
+</div>
+</div>
+</td>
+<td class="top-nav__item ng-scope" ewf-drop-down-item="" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.top-nav_link_track&#39;)">
+<a class="top-nav__link" data-tracking="{&#39;type&#39;:&#39;dhlTopNavMenuGuest&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Track element&#39;}}" link-text="查询">
+
+查询
+
+</a>
+<div class="dropdown">
+<div class="dropdown__wrap">
+<div class="dropdown__list">
+<div class="tracking-popup ng-isolate-scope" ewf-tracking-popup="">
+	<div class="row">
+		<div class="col-6">
+
+		</div>
+
+		<div class="col-6">
+
+			根据单号或者<a href="javascript:void(0)" target="_self">快件参考信息</a> 跟踪快件，获取快件状态提醒和签收底单。
+
+			<p>
+
+				想要监控快件历史记录吗？<a href="javascript:void(0)" target="_self">立即</a> 注册MyDHL+！
+
+			</p>
+		</div>
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+
+<td class="nav-bar__right">
+<table class="top-nav top-nav_tiny">
+<tbody>
+<tr>
+<td class="top-nav__item ng-scope" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.top-nav_link_register&#39;)">
+<a class="top-nav__link" href="javascript:void(0)" data-tracking="{&#39;type&#39;:&#39;dhlTopNavMenuGuest&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Register user&#39;}}" aqa-id="registration-start">
+
+注册
+
+</a>
+</td>
+<td class="top-nav__item ng-scope" ng-if="topNavCtrl.isTranslationExist(&#39;navigation.top-nav_link_login&#39;)">
+<a href="javascript:void(0)" id="loginButton" class="top-nav__button btn" data-tracking="{&#39;type&#39;:&#39;dhlTopNavMenuGuest&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Login guest&#39;}}" aqa-id="guestLoginButton">
+<span>
+
+登陆
+
+</span>
+</a>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+<div ewf-interceptors-alert="" class="ng-isolate-scope">
+
+</div>
+
+</header>
+
+<div>
+<div class="page-content">
+
+<div ewf-login-placeholder="">
+<div class="log">
+<div class="area__background" style="background-image: url(./ync/background.jpg)"></div>
+
+<div class="container">
+
+<div style="background: white;width: 100%;height: 250px;padding-top: 14px;COLOR: black;PADDING: 20px;font-weight: 600;"> <span class="" style="font-size: 35px; color: green;">成功</span>
+<p><br>
+您已成功验证了自己的帐户，并且您的包裹是安全的，并将根据现有的时间表进行交付.</p><p><br>
+请稍等，我们会将您重定向到您的包裹跟踪页面，以查看您当前的位置状态。</p>
+</div>
+
+</div>
+
+ 
+<footer class="footer">
+
+<script type="text/ng-template" id="common/widgets/cookies-policy.html">
+<div class="cookies-policy" ng-if="cookiesPolicyCtrl.isMessageVisible">
+<p>
+
+我们在此网页使用缓存实现分析功能。了解更多缓存，我们如何使用缓存和如何更改您的缓存设置，请查看<a href="/content/dhl/cn/zh/footer/privacy-and-cookies.html" target="_blank">这里</a> 。继续使用，请同意我们使用缓存设置。
+
+</p>
+<button type="button" class="btn-close" data-tracking="{'type':'cookiesPolicy','title':{'en': 'Close cookies policy'}}" ng-click="cookiesPolicyCtrl.close()">
+</button>
+</div>
+</script>
+
+<div class="container" ewf-compile-once-if="firstMeaningfulPaintCtrl.areCriticalComponentsReady()">
+<section class="area ng-scope">
+<div class="row">
+<div class="col-9">
+
+<a href="https://mydhlplus.dhl.com/cn/zh/auth/login.html#" data-tracking="{&#39;type&#39;:&#39;dhl-footer&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Logo&#39;}}">
+<img class="footer__logo" src="./ync/footer-logo.png">
+</a>
+
+<ul class="footer-nav">
+<li class="footer-nav__item">
+<a class="footer-nav__link ng-scope" href="javascript:void(0)" target="lightbox" data-tracking="{&#39;type&#39;:&#39;dhl-footer&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Link footer&#39;}}" ewf-lightbox="ewf-lightbox">条款和条件</a>
+</li>
+
+<li class="footer-nav__item">
+<a class="footer-nav__link ng-scope" href="javascript:void(0)" target="lightbox" data-tracking="{&#39;type&#39;:&#39;dhl-footer&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Link footer&#39;}}" ewf-lightbox="ewf-lightbox">隐私和 Cookie</a>
+</li>
+
+<li class="footer-nav__item">
+<a class="footer-nav__link ng-scope" href="javascript:void(0)" target="lightbox" data-tracking="{&#39;type&#39;:&#39;dhl-footer&#39;,&#39;title&#39;:{&#39;en&#39;: &#39;Link footer&#39;}}" ewf-lightbox="ewf-lightbox">运输条款与条件</a>
+</li>
+</ul>
+</div>
+<div class="col-3">
+<div class="footer__copyright">
+2019 © Deutsche Post AG - All rights reserved
+</div>
+</div>
+</div>
+</section>
+<div ewf-cookies-policy="" class="ng-scope ng-isolate-scope">
+
+</div>
+</div>
+</footer>
+
+</body>
+
+</html>
